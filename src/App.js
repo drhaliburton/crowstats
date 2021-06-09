@@ -39,8 +39,7 @@ const Logo = styled.img`
   margin: auto;
 `
 
-function Table({columns, data}) {
-	// Use the state and functions returned from useTable to build your UI
+const Table = ({columns, data}) => {
 	const {
 		getTableProps,
 		getTableBodyProps,
@@ -52,7 +51,6 @@ function Table({columns, data}) {
 		data,
 	})
 
-	// Render the UI for your table
 	return (
 		<table {...getTableProps()}>
 			<thead>
@@ -87,7 +85,6 @@ function Table({columns, data}) {
 
 const App = () => {
 	const [isLoading, setIsLoading] = useState(true)
-
 	const [data, setData] = useState([])
 	const columns = React.useMemo(
 		() => [
@@ -98,10 +95,6 @@ const App = () => {
 						Header: 'Name',
 						accessor: 'name',
 					},
-					// {
-					//   Header: 'Runs',
-					//   accessor: 'runs',
-					// },
 					{
 						Header: '2021',
 						accessor: '2021',
@@ -124,8 +117,6 @@ const App = () => {
 		[]
 	)
 
-	console.log(data)
-
 	useEffect(() => {
 		if (!data.length && isLoading) {
 			fetch('https://sheet.best/api/sheets/969a17ba-d4ed-49ee-920e-bca9fe9d7dd9')
@@ -135,7 +126,6 @@ const App = () => {
 					setIsLoading(false)
 				});
 		}
-
 	}, [data])
 
 	if (isLoading) {
