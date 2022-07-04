@@ -84,8 +84,22 @@ const Table = ({columns, data}) => {
 }
 
 const App = () => {
+
 	const [isLoading, setIsLoading] = useState(true)
 	const [data, setData] = useState([])
+	const yearHeaders = data.reduce((headers, dataSet) => {
+		const keys = Object.keys(dataSet)
+		keys.forEach((key) => {
+			if (/\d{4}/.test(key) && !headers?.includes(key)) {
+				headers.push(key)
+			}
+		})
+		return headers
+	}, [])
+	const yearColumns = yearHeaders.reverse().map((year) => ({
+		Header: year,
+		accessor: year.toLowerCase(),
+	}))
 	const columns = React.useMemo(
 		() => [
 			{
@@ -95,18 +109,7 @@ const App = () => {
 						Header: 'Name',
 						accessor: 'name',
 					},
-					{
-						Header: '2021',
-						accessor: '2021',
-					},
-					{
-						Header: '2020',
-						accessor: '2020',
-					},
-					{
-						Header: '2019',
-						accessor: '2019',
-					},
+					...yearColumns,
 					{
 						Header: 'Total',
 						accessor: 'total',
@@ -114,7 +117,7 @@ const App = () => {
 				],
 			},
 		],
-		[]
+		[yearColumns]
 	)
 
 	useEffect(() => {
@@ -126,12 +129,12 @@ const App = () => {
 					setIsLoading(false)
 				});
 		}
-	}, [data])
+	}, [data, isLoading])
 
 	if (isLoading) {
 		return (
 			<Styles>
-				<img src="https://i.pinimg.com/originals/bb/09/58/bb0958d5f92bf787c6091c850b30a6e2.gif"/>
+				<img alt="flying crow" src="https://i.pinimg.com/originals/bb/09/58/bb0958d5f92bf787c6091c850b30a6e2.gif"/>
 			</Styles>
 		)
 	}
